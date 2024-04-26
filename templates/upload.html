@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload to the site</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-image: url('https://wallpapercave.com/wp/wp10532924.jpg'); /* Replace 'background.jpg' with your background image file path */
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .tabs {
+        background-color: rgba(255, 255, 255, 0.893);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.803);
+    }
+    .tab {
+        margin-bottom: 10px;
+    }
+</style>
+</head>
+<body>
+<div class="tabs">
+    <div class="tab">
+        <h2>Login</h2>
+        <p>Login with your username and password.</p>
+        <form action = "saved_data" method = "post" enctype="multipart/form-data">
+            Username: <input name="username" type="text"/><br/>
+            Password: <input name="password" type="text"/><br/>
+            <input type="submit"/>
+        </form>
+    </div>
+    
+</div>
+</body>
+</html>

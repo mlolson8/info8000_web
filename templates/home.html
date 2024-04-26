@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+  body {
+            background-image: url('https://wallpapercave.com/wp/wp10532924.jpg');
+            background-size: cover; /* Cover the entire background */
+            background-repeat: no-repeat; /* Do not repeat the background image */
+            min-height: 100vh; /* Ensure the body covers the entire viewport height */
+            margin: 0; /* Remove default margin */
+            display: flex; /* Use flexbox for centering */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            margin: 20px;
+            text-align: center; /* Center text */
+        }
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-container form label {
+            margin-bottom: 10px; /* Add more spacing below the label */
+        }
+        .form-container form input[type="file"] {
+            margin-bottom: 15px; /* Add more spacing below the file input */
+        }
+        .form-container form textarea {
+            margin-bottom: 15px; /* Add more spacing below the textarea */
+        }
+        .form-container form input[type="submit"] {
+            margin-top: 15px; /* Add more spacing above the submit button */
+        }
+    
+</style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Form</title>
+</head>
+<body>
+  <div class="form-container">  
+    <h1>Welcome, {{ user_msg }}! Let's upload new data.</h1>
+    <p>Your api_key is: {{ api_key_msg }}</p>
+    <form id="reportForm" action="{{url_for('report')}}" method="post" enctype="multipart/form-data">
+      <label for="manual">Enter GPS Coordinates:</label>
+      <input type="text" id="GPS" name="GPS" placeholder="Latitude, Longitude">
+      <button type="button" onclick="getGPS()">Get Current Location</button>
+      <br>
+      <label for="file">Upload File:</label>
+      <input type="file" id="file1" name="file1">
+      <br>
+      <label for="description">File Description:</label>
+      <textarea id="description" name="description" rows="4" cols="50"></textarea>
+      <input type="hidden" name="visitor_ip" id="visitor_ip" value=""> 
+      <input type="hidden" name="username" id="username" value="{{ user_msg }}" > 
+      <br>
+      <button type="submit">Submit</button>
+    </form>
+    <br>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+    function logout() {
+      window.location.href = "/";
+    }
+
+    // Function to get GPS coordinates from the browser
+    function getGPS() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+
+    function showPosition(position) {
+      document.getElementById("GPS").value = position.coords.latitude + ", " + position.coords.longitude;
+    }
+  </script>
+  <script>
+    // Function to retrieve the visitor's IP address
+    function getVisitorIP(callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'https://api.ipify.org?format=json', true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          callback(response.ip);
+        }
+      };
+      xhr.send();
+    }
+  
+    // Populate the hidden field with the visitor's IP address
+    getVisitorIP(function(ip) {
+      document.getElementById('visitor_ip').value = ip;
+    });
+  </script>
+</body>
+</html>

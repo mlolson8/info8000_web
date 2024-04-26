@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Submitted</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-image: url('https://wallpapercave.com/wp/wp10532924.jpg'); /* Replace 'background.jpg' with your background image file path */
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .tabs {
+        background-color: rgba(255, 255, 255, 0.893);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.803);
+    }
+    .tab {
+        margin-bottom: 10px;
+    }
+</style>
+</head>
+<body>
+<div class="tabs">
+    <div class="tab">
+        <h2>Report Data Summary</h2>
+        <p>Report ID: {{ report_id_msg }}</p>
+        <p>User ID: {{ user_id_msg }}</p>
+        <p>Username: {{ username_msg }}</p>
+        <p>Time of Submission: {{ date_time_msg }}</p>
+        <p>Latitude: {{ lat_msg }}</p>
+        <p>Longitude: {{ long_msg }}</p>
+        <p>State: {{ state_msg }}</p>
+        <p>Country: {{ country_msg }}</p>
+        <p>Temperature at time of submission: {{ temp_msg }}</p>
+        <p>IP Address of User: {{ ip_addr_msg }}</p>
+        <p>Description of File: {{ desc_msg }}</p>
+        <p>Overall Sentiment of file description: {{ sentiment_msg }}</p>
+        <p>Saved file location: {{ file_path_msg }}</p>
+        <br>
+        <button onclick="logout()">Logout</button>
+    </div>
+    
+</div>
+</body>
+</html>
+<script>
+    function logout() {
+      window.location.href = "/";
+    }
+</script>

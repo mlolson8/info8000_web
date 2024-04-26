@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<form action = "postform" method = "post" enctype="multipart/form-data">
+    Text: <input name="var1" type="text"/><br/>
+    File: <input name="file1" type="file"/><br/>
+    <input type="submit"/>
+</form>
+{% endblock content %}

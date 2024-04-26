@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matthew Olson's INFO8000 Website</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-image: url('https://i.dailymail.co.uk/i/pix/2014/11/20/23542D1000000578-0-image-15_1416488410229.jpg'); /* Replace 'background.jpg' with your background image file path */
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .tabs {
+        background-color: rgba(255, 255, 255, 0.893);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.803);
+    }
+    .tab {
+        margin-bottom: 10px;
+    }
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+    }
+</style>
+</head>
+<body>
+<div class="tabs">
+    <div class="tab">
+        <h2>Create an Account</h2>
+        <div class="msg">{{ success_msg }}</div>
+        <div class="msg">{{ error_msg }}</div>
+        <form action="/" method="POST">
+            Username: <input name="register_username" type="username"><br/>
+            Password: <input name="register_password" type="password"><br/>
+            <input type="hidden" name="action" value="register">
+            <input type="submit" class="btn" value="Register">
+        </form>
+    </div>
+    <div class="tab">
+        <h2>Login and Upload New Data</h2>
+        <div class="msg">{{ not_found_message }}</div>
+        <form action="/" method="POST">
+            Username: <input name="login_username" type="username"><br/>
+            Password: <input name="login_password" type="password"><br/>
+            <input type="hidden" name="action" value="login">
+            <input type="submit" class="btn" value="Login">
+        </form>
+    </div>
+    
+    <div class="tab">
+        <h2>Saved Data</h2>
+        <p>See your saved data.</p>
+        <button onclick="location.href='data'">View Saved Data</button>
+    </div>
+</div>
+</body>
+</html>

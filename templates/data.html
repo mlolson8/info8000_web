@@ -1,0 +1,189 @@
+<html><head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+<style>
+    body {
+        background-image: url('https://s1.1zoom.me/big0/127/Stars_Closeup_Sun_Black_background_536027_1280x720.jpg');
+        background-size: cover; /* Cover the entire background */
+        background-repeat: no-repeat; /* Do not repeat the background image */
+        min-height: 100vh; /* Ensure the body covers the entire viewport height */
+        margin: 0; /* Remove default margin */
+        display: flex; /* Use flexbox for centering */
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        flex-direction: column; /* Align items in a column */
+    }
+    .tabs {
+        background-color: rgba(255, 255, 255, 0.893);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.803);
+    }
+    .tab {
+        margin-bottom: 10px;
+    }
+    h1 {
+        color: rgba(185, 175, 175, 0.949);
+        margin-bottom: 20px; /* Add spacing below the title */
+    }
+    table {
+        border-collapse: collapse;
+        width: 80%; /* Adjust the width of the table */
+        max-width: 800px; /* Set a maximum width for the table */
+        background-color: white; /* Background color for the table */
+        border-radius: 5px; /* Border radius for the table */
+    }
+    th, td {
+        border: 1px solid #000000;
+        text-align: left;
+        padding: 5px; /* Reduce padding */
+        font-size: 14px; /* Reduce font size */
+    }
+    th {
+        background-color: #f97f7f;
+        position: relative; /* Position relative for arrow */
+        cursor: pointer; /* Set cursor to pointer for sorting */
+    }
+    th:hover {
+        background-color: rgb(252, 89, 89); /* Change background color when hovering */
+    }
+    #filterForm {
+        margin-bottom: 20px; /* Add margin below the form */
+        margin-top: 20px; /* Add spacing above the filter form */
+        text-align: center; /* Center the filter form */
+    }
+</style>
+</head>
+<body>
+    <h1>View All Saved Data</h1>
+    <table id="dataTable" class="sortable">
+        <thead>
+            <tr>
+                <th role="columnheader">Report ID</th>
+                <th role="columnheader">User ID</th>
+                <th role="columnheader">Username</th>
+                <th role="columnheader">Date/Time</th>
+                <th role="columnheader">Latitude</th>
+                <th role="columnheader">Longitude</th>
+                <th role="columnheader">State</th>
+                <th role="columnheader">Country</th>
+                <th role="columnheader">Temperature</th>
+                <th role="columnheader">IP Address</th>
+                <th role="columnheader">Description</th>
+                <th role="columnheader">Sentiment of Description</th>
+                <th role="columnheader">File Path</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data_msg %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td> 
+                <td>{{ row[2] }}</td> 
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+                <td>{{ row[6] }}</td>
+                <td>{{ row[7] }}</td>
+                <td>{{ row[8] }}</td>
+                <td>{{ row[9] }}</td>
+                <td>{{ row[10] }}</td>
+                <td>{{ row[11] }}</td>
+                <td>{{ row[12] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- Form for filtering -->
+    <div class="tabs" style="float: left">
+        <div class="tab">        
+            <form id="filterForm">
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" name="latitude"><br>
+        
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" name="longitude"><br>
+        
+            <label for="distance">Distance (km):</label>
+            <input type="text" id="distance" name="distance"><br><br>
+        
+            <label for="numReports">Number of Reports:</label>
+            <input type="text" id="numReports" name="numReports"><br><br>
+        
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate"><br><br>
+        
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate"><br><br>
+        
+            <button type="button" onclick="filterTable()">Filter Table</button>
+            <button type="button" onclick="clearFilter()">Clear Filter</button> 
+            </form>
+            <br>
+            <form action="/" method="GET">
+                <input type="submit" value="Go to Homepage">
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.0/tablesort.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            new Tablesort(document.getElementById('dataTable'));
+        });
+    </script>
+    <script>
+        function filterTable() {
+            var latitude = document.getElementById('latitude').value;
+            var longitude = document.getElementById('longitude').value;
+            var distance = document.getElementById('distance').value;
+            var numReports = parseInt(document.getElementById('numReports').value);
+            var startDate = new Date(document.getElementById('startDate').value);
+            var endDate = new Date(document.getElementById('endDate').value);
+            endDate.setDate(endDate.getDate() + 1);
+
+            // Loop through each row in the table and hide/show based on latitude, longitude, distance, number of reports, start date, and end date
+            var table = document.getElementById('dataTable');
+            var rows = table.getElementsByTagName('tr');
+            var rowsShown = 0; // Counter for the number of rows shown
+            for (var i = 1; i < rows.length; i++) {
+                var row = rows[i];
+                var rowLatitude = parseFloat(row.cells[4].innerText); // Index 4 is latitude column
+                var rowLongitude = parseFloat(row.cells[5].innerText); // Index 5 is longitude column
+                var rowDistance = calculateDistance(latitude, longitude, rowLatitude, rowLongitude);
+
+                // Parse the date from the table cell and split date and time
+                var rowDateTime = row.cells[3].innerText.split(' '); // Index 3 is date/time column
+                var rowDate = new Date(rowDateTime[0]); // Only want the date
+
+                var latitudeFilterPassed = !latitude || rowDistance <= distance;
+                var numReportsFilterPassed = isNaN(numReports) || rowsShown < numReports;
+                var startDateFilterPassed = isNaN(startDate) || rowDate >= startDate;
+                var endDateFilterPassed = isNaN(endDate) || rowDate <= endDate;
+
+                // Show/hide row based on latitude, longitude, distance, number of reports, start date, and end date filters
+                if (latitudeFilterPassed && numReportsFilterPassed && startDateFilterPassed && endDateFilterPassed) {
+                    row.style.display = '';
+                    rowsShown++;
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            var R = 6371; // Radius of the Earth in kilometers
+            var dLat = (lat2 - lat1) * Math.PI / 180; // Convert degrees to radians
+            var dLon = (lon2 - lon1) * Math.PI / 180;
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            var distance = R * c; // Distance in kilometers
+            return distance;
+        }
+        function clearFilter() {
+            location.reload(); // Reload the page to clear the filter
+        }
+    </script>
+    
