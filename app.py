@@ -7,7 +7,6 @@ from datetime import datetime
 from flask_cors import CORS
 from flask_httpauth import HTTPBasicAuth
 import sqlite3
-import pandas as pd 
 import bcrypt
 import secrets
 import string
