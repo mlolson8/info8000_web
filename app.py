@@ -13,6 +13,7 @@ import string
 import requests
 import datetime
 import os
+cwd = os.getcwd() # Change working directory to this one
 
 # Functions
 def generate_api_key(length=32):
